@@ -138,6 +138,6 @@ components {
 outputs {
     
     ;output1 "file://myfirst.eti?type=raw"
-	zmq "zmq+tcp://127.0.0.1:8181"	
+	zmq "zmq+tcp://*:8181"	
 	throttle "simul://"
 }
