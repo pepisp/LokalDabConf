@@ -1,0 +1,143 @@
+; This is the official configuration file example that
+; serves as documentation for the config file reader.
+;
+; As you can see, comments are defined by semicolons.
+;
+; The format is called INFO format, and defined by boost property_tree:
+; http://www.boost.org/doc/libs/1_41_0/doc/html/boost_propertytree/parsers.html#boost_propertytree.parsers.info_parser
+
+; It consists of six mandatory sections, whose relative order in this
+; file are of no importance.
+
+; In case of questions or ambiguities, the documentation for the
+; command-line configuration interface still mostly applies.
+
+; The general section defines global multiplex parameters.
+general {
+    ; the DAB Transmission mode (values 1-4 accepted)
+    dabmode 1
+
+    ; the number of ETI frames to generate (set to 0 to get an unlimited number)
+    nbframes 0
+    managementport 12720
+
+}
+
+remotecontrol {
+    ; enable the telnet remote control server on the given port
+    ; This server allows you to read and define parameters that
+    ; some features export. It is only accessible from localhost.
+    ; Set the port to 0 to disable the server
+    telnetport 12721
+
+    ; the remote control server makes use of the unique identifiers
+    ; for the subchannels, services and components. Make sure you
+    ; chose them so that you can identify them.
+}
+
+; Some ensemble parameters
+ensemble {
+    id 0x4fff ; you can also use decimal if you want
+    ecc 0xe2 ; Extended Country Code
+
+   local-time-offset auto ; autmatically calculate from system local time
+
+    international-table 1 ; See TS 101 756 clause 5.7
+                          ; 1 corresponds to the PTy used in RDS
+                          ; 2 corresponds to program types used in north america
+    label "PWrMux"
+    shortlabel "PWr"
+}
+
+; Definition of DAB services
+services {
+    ; Each service has it's own unique identifier, that is
+    ; used throughout the configuration file and for the RC.
+    srv-p1 {
+        label "DAB_RMF"
+	shortlabel "DABRMF"
+	pty 0
+    }
+    srv-p2 {
+        label "DAB_RAM"
+      	shortlabel "DABRAM"
+	pty 1
+    }
+    srv-p3 {
+	label "Lokal DAB"	
+	shortlabel "LokDAB"
+	pty 2
+	}
+
+}
+
+; The subchannels are defined in the corresponding section.
+; supported types are : audio, bridge, data, enhancedpacket,
+;                       dabplus, dmb, packet, test
+subchannels {
+    sub-p1 {
+        type dabplus
+	inputfile "tcp://127.0.0.1:9000"
+	bitrate 96
+	protection 1
+	id 1
+	zmq-buffer 40
+	zmq-prebuffering 40
+    }
+    sub-p2 {
+        type dabplus
+	inputfile "tcp://127.0.0.1:9001"
+	bitrate 96
+	protection 1
+	id 2
+	zmq-buffer 40
+	zmq-prebuffering 40
+    }
+    sub-p3 {
+	type dabplus
+	inputfile "tcp://127.0.0.1:9002"
+	bitrate 96
+	protection 1
+	id 3
+	zmq-buffer 40
+	zmq-prebuffering 40	
+	}
+}
+
+; For now, each component links one service to one subchannel
+components {
+    ; the component unique identifiers are used for the RC.
+    comp-p1 {
+
+        label "DAB_RMF"
+	shortlabel "DABRMF"        
+	service srv-p1
+        subchannel sub-p1
+
+    }
+
+    comp-p2 {
+        label "DAB_RAM"
+	shortlabel "DABRAM"
+        service srv-p2
+        subchannel sub-p2
+	figtype 0x2
+    }
+    comp-p3 {
+	label "Lokal DAB"
+	shortlabel "LokDAB"
+	service srv-p3
+	subchannel sub-p3
+	figtype 0x2
+	}
+
+}
+
+; A list of outputs, in the format
+; unique-id "uri"
+outputs {
+    
+    ;output1 "file://myfirst.eti?type=raw"
+	zmq "zmq+tcp://127.0.0.1:8181"	
+	throttle "simul://"
+}
