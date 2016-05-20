@@ -37,10 +37,10 @@ remotecontrol {
 
 ; Some ensemble parameters
 ensemble {
-    id 0x4fff ; you can also use decimal if you want
-    ecc 0xe2 ; Extended Country Code
+    id "0x4fff" ; you can also use decimal if you want
+    ecc "0xe2" ; Extended Country Code
 
-   local-time-offset auto ; autmatically calculate from system local time
+   local-time-offset "auto" ; autmatically calculate from system local time
 
     international-table 1 ; See TS 101 756 clause 5.7
                           ; 1 corresponds to the PTy used in RDS
@@ -76,7 +76,7 @@ services {
 ;                       dabplus, dmb, packet, test
 subchannels {
     sub-p1 {
-        type dabplus
+        type "dabplus"
 	inputfile "tcp://127.0.0.1:9000"
 	bitrate 96
 	protection 1
@@ -85,7 +85,7 @@ subchannels {
 	zmq-prebuffering 40
     }
     sub-p2 {
-        type dabplus
+        type "dabplus"
 	inputfile "tcp://127.0.0.1:9001"
 	bitrate 96
 	protection 1
@@ -94,7 +94,7 @@ subchannels {
 	zmq-prebuffering 40
     }
     sub-p3 {
-	type dabplus
+	type "dabplus"
 	inputfile "tcp://127.0.0.1:9002"
 	bitrate 96
 	protection 1
@@ -111,24 +111,24 @@ components {
 
         label "DAB_RMF"
 	shortlabel "DABRMF"        
-	service srv-p1
-        subchannel sub-p1
+	service "srv-p1"
+        subchannel "sub-p1"
 
     }
 
     comp-p2 {
         label "DAB_RAM"
 	shortlabel "DABRAM"
-        service srv-p2
-        subchannel sub-p2
-	figtype 0x2
+        service "srv-p2"
+        subchannel "sub-p2"
+	figtype "0x2"
     }
     comp-p3 {
 	label "Lokal DAB"
 	shortlabel "LokDAB"
-	service srv-p3
-	subchannel sub-p3
-	figtype 0x2
+	service "srv-p3"
+	subchannel "sub-p3"
+	figtype "0x2"
 	}
 
 }
@@ -138,6 +138,6 @@ components {
 outputs {
     
     ;output1 "file://myfirst.eti?type=raw"
-	zmq "zmq+tcp://*:8181"	
+	zmq "zmq+tcp://156.17.31.235:8181"	
 	throttle "simul://"
 }
